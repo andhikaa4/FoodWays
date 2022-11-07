@@ -112,7 +112,7 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if request.Location != "" {
 		user.Location = request.Location
 	}
-	if resp.SecureURL != "" {
+	if filename != "" {
 		user.Image = resp.SecureURL
 	}
 
