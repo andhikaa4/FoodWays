@@ -1,14 +1,19 @@
 package handlers
 
 import (
+	"context"
 	dto "dumbmerch/dto/result"
 	usersdto "dumbmerch/dto/users"
 	"dumbmerch/models"
 	"dumbmerch/repositories"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gorilla/mux"
 )
 
@@ -30,7 +35,8 @@ func (h *handler) FindUsers(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 	}
 	for i, p := range users {
-		users[i].Image = path_file + p.Image
+		imagePath := os.Getenv("PATH_FILE") + p.Image
+		users[i].Image = imagePath
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -50,7 +56,7 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-	user.Image = path_file + user.Image
+	user.Image = os.Getenv("PATH_FILE") + user.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: "Success", Data: user}
@@ -74,6 +80,20 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		Role:     r.FormValue("role"),
 	}
 
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
+
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+
+	// Upload file to Cloudinary ...
+	resp, err := cld.Upload.Upload(ctx, filename, uploader.UploadParams{Folder: "dumbmerch"})
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 
 	user := models.User{}
@@ -92,8 +112,8 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if request.Location != "" {
 		user.Location = request.Location
 	}
-	if filename != "" {
-		user.Image = filename
+	if resp.SecureURL != "" {
+		user.Image = resp.SecureURL
 	}
 
 	if request.Role != "" {
