@@ -91,7 +91,7 @@ function Cart() {
 
                                             <div className='mt-4'>
                                                 <div key={item.id} className='d-flex'>
-                                                    <img className='w-25 me-3' src={`http://localhost:5000/uploads/${item.product.image}`} alt='' />
+                                                    <img className='w-25 me-3' src={item.product.image} alt='' />
                                                     <div className='d-flex w-100 mt-3'>
                                                         <div className='me-auto'>
                                                             <div>
