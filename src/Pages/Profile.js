@@ -47,7 +47,7 @@ function Profile() {
                 <div className='w-50 px-5'>
                     <h3 className='mb-3'>My Profile</h3>
                     <div className='d-flex'>
-                        <img className='me-3 rounded' style={{ height: "150px", width: "122px", overflow: "hidden" }} src={user?.image ?user?.image : BlankProfile  } alt="" />
+                        <img className='me-3 rounded' style={{ height: "150px", width: "122px", overflow: "hidden" }} src={user?.image ? BlankProfile : user?.image  } alt="" />
                         <div style={{ fontSize: "12px" }}>
                             <div className='mb-3'>
                                 <p className='m-0 fw-bold'>Fullname</p>
