@@ -392,7 +392,7 @@ export function PrivatePage(props) {
                 <Dropdown.Toggle variant="transparent" id="dropdown-basic">
                 <div>
                    <img style={{height:"50px" ,width:"50px", borderRadius:"100px", objectFit:"cover"}} 
-                   className='rounded-circle' src={item?.image == "http://localhost:5000/uploads/"? BlankProfile: item?.image}/>
+                   className='rounded-circle' src={item?.image ? BlankProfile: item?.image}/>
                    </div>
                 </Dropdown.Toggle>
                 
