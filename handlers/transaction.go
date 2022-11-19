@@ -144,8 +144,9 @@ func (h *handlerTransaction) CreateTransaction2(w http.ResponseWriter, r *http.R
 	product, _ := h.TransactionRepository.FindProductById(productId)
 
 	transaction := models.Cart{
+		ID:      TransactionId,
 		BuyerID: userId,
-		Status:  request.Status,
+		Status:  "pending",
 		Product: product,
 		Qty:     1,
 	}
@@ -161,8 +162,9 @@ func (h *handlerTransaction) CreateTransaction2(w http.ResponseWriter, r *http.R
 	cart, _ = h.TransactionRepository.GetTransaction2(cart.ID)
 
 	w.WriteHeader(http.StatusOK)
-	response := dto.SuccessResult{Code: "Success", Data: cart}
+	response := dto.SuccessResult{Code: "success", Data: cart}
 	json.NewEncoder(w).Encode(response)
+
 }
 
 func (h *handlerTransaction) GetTransaction2(w http.ResponseWriter, r *http.Request) {
